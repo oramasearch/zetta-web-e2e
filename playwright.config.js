@@ -12,7 +12,7 @@ import { defineConfig, devices } from '@playwright/test'
 const ZETTA = process.env.ZETTA_BASE_URL || 'http://127.0.0.1:4800'
 const DESIGN =
   process.env.DESIGN_BASE_URL ||
-  'https://oramadesign-system-production.up.railway.app/studio/'
+  'https://oramadesign-system-reports-preview.up.railway.app/studio/'
 
 export default defineConfig({
   testDir: './tests',
@@ -42,7 +42,18 @@ export default defineConfig({
       testDir: './tests/studio',
       // 375px is in the design contract, so it is a project rather than a
       // one-off viewport override buried in a spec.
-      use: { ...devices['iPhone 13'], baseURL: ZETTA },
+      //
+      // Chromium at 375px, NOT the iPhone preset: that preset runs WebKit, which
+      // would conflate a narrow-layout failure with a rendering-engine
+      // difference. Two questions, two projects — Safari coverage is `studio-webkit`.
+      use: { ...devices['Desktop Chrome'], viewport: { width: 375, height: 812 }, baseURL: ZETTA },
+    },
+    {
+      name: 'studio-webkit',
+      testDir: './tests/studio',
+      // Real WebKit — one of the reasons this suite is Playwright. Answers "does
+      // Studio work in Safari", separately from "does it work narrow".
+      use: { ...devices['Desktop Safari'], baseURL: ZETTA },
     },
     {
       name: 'parity',

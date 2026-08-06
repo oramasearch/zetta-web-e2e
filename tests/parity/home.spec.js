@@ -65,7 +65,7 @@ test.describe('Studio home — parity with the deployed design', () => {
       contentType: 'application/json',
     })
 
-    // KNOWN GAP (zetta#973): this extractor reads OUR markup correctly and returns
+    // KNOWN GAP (zetta#970): this extractor reads OUR markup correctly and returns
     // {} for the design's, whose React classes do not carry a `group` token. The
     // cross-origin half works — the page loads, in the same run, from the other
     // origin — but the design-side selectors are not written yet, so the diff is
@@ -94,7 +94,7 @@ test.describe('Studio home — parity with the deployed design', () => {
     ).toBe(true)
   })
 
-  // FIXME(zetta#973): the engine serves no route for Changelog or CLI, and the
+  // FIXME(zetta#970): the engine serves no route for Changelog or CLI, and the
   // design system forbids a link that fakes a destination. Closing this gap means
   // serving real content, not adding two nav entries that 404.
   test.fixme('Documentation carries the design entries', async ({ page }) => {
@@ -111,7 +111,7 @@ test.describe('Studio home — parity with the deployed design', () => {
     }
   })
 
-  // FIXME(zetta#973): "Set up profile" needs a Workspace Profile view. The
+  // FIXME(zetta#970): "Set up profile" needs a Workspace Profile view. The
   // capability exists (#886) and the web UI has no screen for it, so the card is
   // currently a dead end: it explains something you cannot begin.
   test.fixme('both entry paths offer an action', async ({ page }) => {

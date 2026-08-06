@@ -1,0 +1,17 @@
+{
+  "name": "zetta-web-e2e",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Playwright end-to-end and design-parity suite for Orama Studio",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:studio": "playwright test --project=studio",
+    "test:parity": "playwright test --project=parity",
+    "report": "playwright show-report",
+    "install:browsers": "playwright install chromium webkit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0"
+  }
+}

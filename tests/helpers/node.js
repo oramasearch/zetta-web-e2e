@@ -2,6 +2,10 @@ import { expect } from '@playwright/test'
 
 // Every `?view=` route the Studio web UI serves. Kept here rather than inline so
 // a new view is added in one place and every route-shaped spec picks it up.
+//
+// NOT the same set as the sidebar: some routes are sub-destinations reached from
+// a screen rather than rail items — `profile` is reached from the Discover
+// Opportunities card, exactly as in the design. NAV_VIEWS below is the rail.
 export const VIEWS = [
   'overview',
   'projects',
@@ -18,7 +22,11 @@ export const VIEWS = [
   'agents',
   'chat',
   'datagen',
+  'profile',
 ]
+
+// The subset that appears in the sidebar, and so must mark itself active.
+export const NAV_VIEWS = VIEWS.filter((view) => view !== 'profile')
 
 /**
  * Put the browser into a signed-in session.

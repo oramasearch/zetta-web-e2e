@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { signIn, VIEWS } from '../helpers/node.js'
+import { signIn, NAV_VIEWS } from '../helpers/node.js'
 
 // Rung 3 of the walkthrough ladder: prove the harness reaches a real node at all,
 // and that the Studio shell is the shell the design specifies.
@@ -44,7 +44,7 @@ test.describe('Studio shell', () => {
   test('every view marks itself active in the nav', async ({ page }) => {
     // One assertion per route, so a broken route names itself rather than
     // failing a loop with an opaque index.
-    for (const view of VIEWS) {
+    for (const view of NAV_VIEWS) {
       await page.goto(`/?view=${view}`)
       await expect(
         page.locator(`nav.side a.active[href="/?view=${view}"]`),

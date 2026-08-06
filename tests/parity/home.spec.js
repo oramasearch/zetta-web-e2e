@@ -134,10 +134,7 @@ test.describe('Studio home — parity with the deployed design', () => {
     }
   })
 
-  // FIXME(zetta#970): "Set up profile" needs a Workspace Profile view. The
-  // capability exists (#886) and the web UI has no screen for it, so the card is
-  // currently a dead end: it explains something you cannot begin.
-  test.fixme('both entry paths offer an action', async ({ page }) => {
+  test('both entry paths offer an action', async ({ page }) => {
     await signIn(page)
     await page.goto('/?view=overview')
 

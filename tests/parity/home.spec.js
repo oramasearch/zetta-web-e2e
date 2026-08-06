@@ -94,20 +94,43 @@ test.describe('Studio home — parity with the deployed design', () => {
     ).toBe(true)
   })
 
-  // FIXME(zetta#970): the engine serves no route for Changelog or CLI, and the
-  // design system forbids a link that fakes a destination. Closing this gap means
-  // serving real content, not adding two nav entries that 404.
-  test.fixme('Documentation carries the design entries', async ({ page }) => {
+  test('Documentation carries the entries that have a real destination', async ({ page }) => {
     await signIn(page)
     await page.goto('/?view=overview')
     const nav = page.locator('nav.side')
 
-    // The design's Documentation group: Overview · Changelog · MCP · CLI · API.
-    for (const entry of ['Overview', 'Changelog', 'MCP', 'CLI', 'API']) {
+    // The design's Documentation group is Overview · Changelog · MCP · CLI · API.
+    // Four of the five now point at real, served content — CLI was added with a
+    // /cli.md the node renders from its own flags.
+    for (const entry of ['Overview', 'MCP', 'CLI', 'API']) {
       await expect(
         nav.getByRole('link', { name: entry, exact: true }),
         `Documentation is missing "${entry}"`,
       ).toBeVisible()
+    }
+  })
+
+  // FIXME(zetta#970): Changelog is the fifth, and the engine has no changelog to
+  // serve. The design system forbids a link that fakes a destination, so the
+  // entry waits on real content rather than being added as a 404.
+  test.fixme('Documentation carries Changelog', async ({ page }) => {
+    await signIn(page)
+    await page.goto('/?view=overview')
+    await expect(
+      page.locator('nav.side').getByRole('link', { name: 'Changelog', exact: true }),
+    ).toBeVisible()
+  })
+
+  test('every Documentation link resolves — none fakes a destination', async ({ page }) => {
+    await signIn(page)
+    await page.goto('/?view=overview')
+    const links = page.locator('nav.side a[href^="/"]:not([href^="/?view="])')
+    const count = await links.count()
+    expect(count, 'no documentation links found').toBeGreaterThan(0)
+    for (let index = 0; index < count; index += 1) {
+      const href = await links.nth(index).getAttribute('href')
+      const response = await page.request.get(href)
+      expect(response.status(), `${href} does not resolve`).toBeLessThan(400)
     }
   })
 
